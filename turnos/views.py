@@ -29,7 +29,7 @@ def inicio(request):
         except:
             error = "Error al guardar turno"
 
-    # 🔥 IMPORTANTE: esto SIEMPRE debe ser queryset
+    
     turnos = HorarioTurno.objects.all().order_by("fecha", "hora")
 
     return render(request, "turnos/index.html", {
