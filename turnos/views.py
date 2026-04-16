@@ -14,29 +14,22 @@ def inicio(request):
     error = None
 
     if request.method == "POST":
+        try:
+            turno = HorarioTurno(
+                nombre=request.POST.get("nombre"),
+                apellido=request.POST.get("apellido"),
+                telefono=request.POST.get("telefono"),
+                email=request.POST.get("email"),
+                fecha=request.POST.get("fecha"),
+                hora=request.POST.get("hora")
+            )
+            turno.save()
+            return redirect("base")
 
-        hora_str = request.POST.get("hora")
-        hora_obj = time.fromisoformat(hora_str)
+        except:
+            error = "Error al guardar turno"
 
-        # 🔒 Validación horario
-        if hora_obj < time(9, 0) or hora_obj > time(18, 0):
-            error = "Horario fuera de atención (9 a 18 hs)"
-        else:
-            try:
-                turno = HorarioTurno(
-                    nombre=request.POST.get("nombre"),
-                    apellido=request.POST.get("apellido"),
-                    telefono=request.POST.get("telefono"),
-                    email=request.POST.get("email"),
-                    fecha=request.POST.get("fecha"),
-                    hora=hora_str
-                )
-                turno.save()
-                return redirect("base")
-
-            except IntegrityError:
-                error = "Ese horario ya está ocupado"
-
+    # 🔥 IMPORTANTE: esto SIEMPRE debe ser queryset
     turnos = HorarioTurno.objects.all().order_by("fecha", "hora")
 
     return render(request, "turnos/index.html", {
