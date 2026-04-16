@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block content %}
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -33,7 +36,7 @@
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand text-white" href="{% url 'home' %}">Home</a>
+        <a class="navbar-brand text-white" href="{% url 'turnos:home' %}">Home</a>
 
         <div class="ms-auto">
             <a class="nav-link text-white" href="#">HorariosDeLosTurnos</a>
@@ -66,25 +69,27 @@
     <h3>Turnos Reservados</h3>
 
     <ul class="list-group">
-        {% for turno in turnos %}
-            <li class="list-group-item">
-                {{ turno.nombre }} {{ turno.apellido }} - {{ turno.fecha }} {{ turno.hora }}
-            </li>
-        {% empty %}
-            <li class="list-group-item">No hay turnos todavía</li>
-        {% endfor %}
-    </ul>
+    {% for turno in turnos %}
+        <li class="list-group-item">
+            {{ turno.nombre }} {{ turno.apellido }} - {{ turno.fecha }} {{ turno.hora }}
+
+            <a href="{% url 'turnos:eliminar_turno' turno.id %}" 
+               class="btn btn-danger btn-sm">
+               Eliminar
+            </a>
+
+        </li>
+    {% empty %}
+        <li class="list-group-item">No hay turnos todavía</li>
+    {% endfor %}
+</ul>
+</ul>
 </div>
 {% if error %}
 <div class="alert alert-danger">
     {{ error }}
 </div>
 {% endif %}
-
-<a href="{% url 'eliminar_turno' turno.id %}" class="btn btn-danger btn-sm">
-    Eliminar
-</a>
-
 {% if user.is_authenticated %}
     <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a>
 {% else %}
@@ -106,6 +111,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     calendar.render();
 });
+
+{% endblock %}
 </script>
 </body>
 </html>

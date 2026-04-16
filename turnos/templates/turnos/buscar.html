@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Buscar Turno</h2>
+
+<form method="get">
+    <input type="text" name="nombre">
+    <button>Buscar</button>
+</form>
+
+<ul>
+{% for turno in resultados %}
+    <li>{{ turno.nombre }} {{ turno.fecha }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

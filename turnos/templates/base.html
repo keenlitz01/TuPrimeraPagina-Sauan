@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Barbería</title>
+</head>
+<body>
+
+<nav>
+    <a href="{% url 'turnos:home' %}">Home</a>
+    <a href="{% url 'turnos:cliente' %}">Cliente</a>
+    <a href="{% url 'turnos:servicio' %}">Servicio</a>
+    <a href="{% url 'turnos:buscar' %}">Buscar</a>
+</nav>
+
+<hr>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
