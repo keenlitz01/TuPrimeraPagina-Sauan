@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.decorators import login_required,render
-
+from django.contrib.auth.decorators import login_required,rende
+from django.shortcuts import render
 @login_required
 def inicio(request):
     return render(request, "turnos/index.html")
