@@ -1,34 +1,59 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
-
-{% block content %}
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Barbería</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <style>
         body {
             background-color: #2f2f2f;
             color: white;
         }
-
         .navbar {
             background-color: #1e7e34;
         }
-
         .form-container {
             max-width: 600px;
             margin: auto;
             background-color: #3a3a3a;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
         }
-
-        input {
+        .form-control {
             margin-bottom: 10px;
+            background-color: #2f2f2f;
+            border: 1px solid #555;
+            color: white;
         }
+        .form-control:focus {
+            background-color: #2f2f2f;
+            color: white;
+            border-color: #1e7e34;
+            box-shadow: 0 0 0 0.2rem rgba(30,126,52,.3);
+        }
+        .form-control::placeholder { color: #aaa; }
+        .list-group-item {
+            background-color: #3a3a3a;
+            color: white;
+            border-color: #555;
+        }
+        .btn-success { background-color: #1e7e34; border: none; }
+        .btn-success:hover { background-color: #155724; }
+        .nav-link-search {
+            color: white !important;
+            font-size: 0.95rem;
+        }
+        .search-input {
+            background-color: #155724;
+            border: 1px solid #aaa;
+            color: white;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.9rem;
+            width: 180px;
+        }
+        .search-input::placeholder { color: #ccc; }
+        .search-input:focus { outline: none; border-color: white; }
     </style>
 </head>
 <body>
@@ -36,86 +61,71 @@
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand text-white" href="{% url 'turnos:home' %}">Home</a>
+        <span class="navbar-brand text-white fw-bold">✂️ Barbería</span>
 
-        <div class="ms-auto">
-            <a class="nav-link text-white" href="#">HorariosDeLosTurnos</a>
+        <div class="d-flex align-items-center gap-3 ms-auto">
+            <!-- Buscador inline en la navbar -->
+            <form method="GET" action="{% url 'turnos:buscar' %}" class="d-flex align-items-center gap-2">
+                <input
+                    type="text"
+                    name="nombre"
+                    class="search-input"
+                    placeholder="Buscar turno por nombre..."
+                >
+                <button type="submit" class="btn btn-outline-light btn-sm">Buscar</button>
+            </form>
+
+            <!-- Horarios -->
+            <a class="nav-link text-white" href="{% url 'turnos:horarios' %}">Horarios de Turnos</a>
+
+            <!-- Logout -->
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" class="m-0">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+            </form>
+            {% endif %}
         </div>
     </div>
 </nav>
 
-<!-- FORMULARIO -->
+<!-- FORMULARIO RESERVAR TURNO -->
 <div class="container mt-5">
     <div class="form-container">
-        <h2>Reservar Turno</h2>
-
+        <h2 class="mb-3">Reservar Turno</h2>
         <form method="POST">
             {% csrf_token %}
-
             <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
             <input type="text" name="apellido" class="form-control" placeholder="Apellido" required>
             <input type="text" name="telefono" class="form-control" placeholder="Teléfono" required>
             <input type="email" name="email" class="form-control" placeholder="Email" required>
             <input type="date" name="fecha" class="form-control" required>
             <input type="time" name="hora" class="form-control" required>
-
             <button class="btn btn-success w-100 mt-2">Guardar Turno</button>
         </form>
     </div>
 </div>
 
 <!-- LISTA DE TURNOS -->
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <h3>Turnos Reservados</h3>
-
     <ul class="list-group">
-    {% for turno in turnos %}
-        <li class="list-group-item">
-            {{ turno.nombre }} {{ turno.apellido }} - {{ turno.fecha }} {{ turno.hora }}
-
-            <a href="{% url 'turnos:eliminar_turno' turno.id %}" 
-               class="btn btn-danger btn-sm">
-               Eliminar
-            </a>
-
+        {% for turno in turnos %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>{{ turno.nombre }} {{ turno.apellido }} — {{ turno.fecha }} {{ turno.hora }}</span>
+            <a href="{% url 'turnos:eliminar_turno' turno.id %}" class="btn btn-danger btn-sm">Eliminar</a>
         </li>
-    {% empty %}
+        {% empty %}
         <li class="list-group-item">No hay turnos todavía</li>
-    {% endfor %}
-</ul>
-</ul>
+        {% endfor %}
+    </ul>
 </div>
+
 {% if error %}
-<div class="alert alert-danger">
-    {{ error }}
+<div class="container">
+    <div class="alert alert-danger">{{ error }}</div>
 </div>
 {% endif %}
-{% if user.is_authenticated %}
-    <form method="post" action="{% url 'logout' %}" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-outline-light">Logout</button>
-</form>
-{% else %}
-    <a href="{% url 'login' %}" class="btn btn-outline-light">Login</a>
-{% endif %}
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-        initialView: 'dayGridMonth',
-        events: [
-            {% for turno in turnos %}
-            {
-                title: "{{ turno.nombre }}",
-                start: "{{ turno.fecha }}T{{ turno.hora }}"
-            }{% if not forloop.last %},{% endif %}
-            {% endfor %}
-        ]
-    });
-    calendar.render();
-});
-
-{% endblock %}
-</script>
 </body>
 </html>

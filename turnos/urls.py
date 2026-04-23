@@ -8,4 +8,5 @@ urlpatterns = [
     path("cliente/", views.crear_cliente, name="cliente"),
     path("servicio/", views.crear_servicio, name="servicio"),
     path("buscar/", views.buscar_turno, name="buscar"),
+    path('horarios/', views.horarios, name='horarios'),
 ]
