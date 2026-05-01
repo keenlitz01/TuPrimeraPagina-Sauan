@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro - Barbería{% endblock %}
+
+{% block extra_styles %}
+.container-form { background-color: #3a3a3a; padding: 40px; border-radius: 10px; max-width: 450px; margin: 0 auto; }
+.errorlist { color: #ff6b6b; font-size: 0.85rem; list-style: none; padding: 0; }
+{% endblock %}
+
+{% block content %}
+<div class="container-form">
+    <h2 class="text-center mb-4">✂️ Registro</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            <label class="form-label">{{ field.label }}</label>
+            <input type="{{ field.field.widget.input_type }}"
+                   name="{{ field.html_name }}"
+                   class="form-control mb-1"
+                   {% if field.value %}value="{{ field.value }}"{% endif %}>
+            {% if field.errors %}
+                <ul class="errorlist mb-2">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+            {% endif %}
+        {% endfor %}
+        <button type="submit" class="btn btn-success w-100 mt-2">Registrarse</button>
+    </form>
+    <p class="text-center mt-3" style="color:#aaa;">
+        ¿Ya tenés cuenta? <a href="{% url 'login' %}" style="color:#1e7e34;">Iniciá sesión</a>
+    </p>
+</div>
+{% endblock %}

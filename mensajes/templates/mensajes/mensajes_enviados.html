@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Mensajes Enviados - Barbería{% endblock %}
+
+{% block extra_styles %}
+.mensaje-card { background-color: #3a3a3a; border: 1px solid #555; border-radius: 8px; padding: 16px 20px; margin-bottom: 10px; }
+.mensaje-card:hover { background-color: #444; }
+{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">📤 Mensajes Enviados</h3>
+{% for mensaje in mensajes %}
+<a href="{% url 'mensajes:detalle_mensaje' mensaje.id %}" class="text-decoration-none">
+    <div class="mensaje-card">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <strong>Para: {{ mensaje.destinatario.username }}</strong>
+                <span style="color:#aaa; font-size:0.9rem;"> — {{ mensaje.asunto }}</span>
+            </div>
+            <span style="color:#aaa; font-size:0.85rem;">{{ mensaje.fecha|date:"d/m/Y H:i" }}</span>
+        </div>
+    </div>
+</a>
+{% empty %}
+<p style="color:#aaa;">No enviaste ningún mensaje todavía.</p>
+{% endfor %}
+<a href="{% url 'mensajes:enviar_mensaje' %}" class="btn btn-success mt-3">Nuevo mensaje</a>
+{% endblock %}

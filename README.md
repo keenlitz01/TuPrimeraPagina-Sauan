@@ -1,18 +1,46 @@
-# Proyecto Barbería Django
+Proyecto Barbería Django
+Aplicación web para gestión de turnos de una barbería, desarrollada con Python y Django.
+Funcionalidades
+Turnos
 
-## Funcionalidades
+Reservar turno con nombre, apellido, teléfono, email, fecha, hora, imagen y notas
+Ver lista de turnos reservados
+Eliminar turnos
+Buscar turnos por nombre
+Ver horarios agrupados por fecha
 
-- Crear Turnos
-- Crear Clientes
-- Crear Servicios
-- Ver Turnos
-- Eliminar Turnos
-- Buscar Turnos
+Usuarios
 
-## Cómo probar
+Registro de usuarios (username, email, password)
+Login y logout
+Perfil de usuario con nombre, apellido, email, avatar y biografía
+Edición de perfil
+Cambio de contraseña
 
-1. Ir a /
-2. Crear turno
-3. Crear cliente (/cliente/)
-4. Crear servicio (/servicio/)
-5. Buscar turno (/buscar/)
+Mensajería
+
+Bandeja de entrada
+Enviar mensajes a otros usuarios
+Ver mensajes enviados
+Ver detalle de mensaje
+Indicador de mensajes no leídos
+
+Otras páginas
+
+Home con formulario de reserva
+About con información de la barbería
+Panel de administración
+
+Tecnologías utilizadas
+
+Python
+Django
+Bootstrap 5
+SQLite
+Pillow
+django-ckeditor
+
+Requisitos previos
+
+Python 3.x
+pip

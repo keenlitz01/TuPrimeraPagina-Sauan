@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Bandeja de Entrada - Barbería{% endblock %}
+
+{% block extra_styles %}
+.mensaje-card { background-color: #3a3a3a; border: 1px solid #555; border-radius: 8px; padding: 16px 20px; margin-bottom: 10px; }
+.mensaje-card.no-leido { border-left: 4px solid #1e7e34; }
+.mensaje-card:hover { background-color: #444; }
+.badge-nuevo { background-color: #1e7e34; font-size: 0.75rem; padding: 3px 8px; border-radius: 10px; }
+{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">📥 Bandeja de Entrada</h3>
+{% for mensaje in mensajes %}
+<a href="{% url 'mensajes:detalle_mensaje' mensaje.id %}" class="text-decoration-none">
+    <div class="mensaje-card {% if not mensaje.leido %}no-leido{% endif %}">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ mensaje.remitente.username }}</strong>
+                <span style="color:#aaa; font-size:0.9rem;"> — {{ mensaje.asunto }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                {% if not mensaje.leido %}
+                    <span class="badge-nuevo">Nuevo</span>
+                {% endif %}
+                <span style="color:#aaa; font-size:0.85rem;">{{ mensaje.fecha|date:"d/m/Y H:i" }}</span>
+            </div>
+        </div>
+    </div>
+</a>
+{% empty %}
+<p style="color:#aaa;">No tenés mensajes en tu bandeja.</p>
+{% endfor %}
+<a href="{% url 'mensajes:enviar_mensaje' %}" class="btn btn-success mt-3">Nuevo mensaje</a>
+{% endblock %}

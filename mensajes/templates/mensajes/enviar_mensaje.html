@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Enviar Mensaje - Barbería{% endblock %}
+
+{% block extra_styles %}
+.container-form { background-color: #3a3a3a; padding: 30px; border-radius: 10px; max-width: 550px; margin: 0 auto; }
+{% endblock %}
+
+{% block content %}
+<div class="container-form">
+    <h3 class="mb-4">✉️ Nuevo Mensaje</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <label class="form-label">Para</label>
+        <select name="destinatario" class="form-select mb-3">
+            <option value="">Seleccioná un usuario</option>
+            {% for usuario in usuarios %}
+                <option value="{{ usuario.id }}">{{ usuario.username }}</option>
+            {% endfor %}
+        </select>
+        <label class="form-label">Asunto</label>
+        <input type="text" name="asunto" class="form-control mb-3" placeholder="Asunto" required>
+        <label class="form-label">Mensaje</label>
+        <textarea name="contenido" class="form-control mb-3" rows="5" placeholder="Escribí tu mensaje..." required></textarea>
+        <button type="submit" class="btn btn-success w-100">Enviar</button>
+    </form>
+</div>
+{% endblock %}

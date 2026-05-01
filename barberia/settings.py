@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'turnos',
+    'accounts',
+    "mensajes",
+    "ckeditor",    
 ]
 
 MIDDLEWARE = [
@@ -120,3 +123,7 @@ STATIC_URL = 'static/'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+
+media_url = '/media/'
+media_root = BASE_DIR / 'media'

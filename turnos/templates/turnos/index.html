@@ -1,131 +1,46 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Barbería</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #2f2f2f;
-            color: white;
-        }
-        .navbar {
-            background-color: #1e7e34;
-        }
-        .form-container {
-            max-width: 600px;
-            margin: auto;
-            background-color: #3a3a3a;
-            padding: 30px;
-            border-radius: 10px;
-        }
-        .form-control {
-            margin-bottom: 10px;
-            background-color: #2f2f2f;
-            border: 1px solid #555;
-            color: white;
-        }
-        .form-control:focus {
-            background-color: #2f2f2f;
-            color: white;
-            border-color: #1e7e34;
-            box-shadow: 0 0 0 0.2rem rgba(30,126,52,.3);
-        }
-        .form-control::placeholder { color: #aaa; }
-        .list-group-item {
-            background-color: #3a3a3a;
-            color: white;
-            border-color: #555;
-        }
-        .btn-success { background-color: #1e7e34; border: none; }
-        .btn-success:hover { background-color: #155724; }
-        .nav-link-search {
-            color: white !important;
-            font-size: 0.95rem;
-        }
-        .search-input {
-            background-color: #155724;
-            border: 1px solid #aaa;
-            color: white;
-            border-radius: 6px;
-            padding: 4px 10px;
-            font-size: 0.9rem;
-            width: 180px;
-        }
-        .search-input::placeholder { color: #ccc; }
-        .search-input:focus { outline: none; border-color: white; }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <span class="navbar-brand text-white fw-bold">✂️ Barbería</span>
+{% block title %}Inicio - Barbería{% endblock %}
 
-        <div class="d-flex align-items-center gap-3 ms-auto">
-            <!-- Buscador inline en la navbar -->
-            <form method="GET" action="{% url 'turnos:buscar' %}" class="d-flex align-items-center gap-2">
-                <input
-                    type="text"
-                    name="nombre"
-                    class="search-input"
-                    placeholder="Buscar turno por nombre..."
-                >
-                <button type="submit" class="btn btn-outline-light btn-sm">Buscar</button>
-            </form>
-
-            <!-- Horarios -->
-            <a class="nav-link text-white" href="{% url 'turnos:horarios' %}">Horarios de Turnos</a>
-
-            <!-- Logout -->
-            {% if user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}" class="m-0">
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div style="background-color:#3a3a3a; padding:30px; border-radius:10px;">
+            <h2 class="mb-3">Reservar Turno</h2>
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                <input type="text" name="nombre" class="form-control mb-2" placeholder="Nombre" required>
+                <input type="text" name="apellido" class="form-control mb-2" placeholder="Apellido" required>
+                <input type="text" name="telefono" class="form-control mb-2" placeholder="Teléfono" required>
+                <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+                <input type="date" name="fecha" class="form-control mb-2" required>
+                <input type="time" name="hora" class="form-control mb-2" required>
+                <label class="form-label">Imagen (opcional)</label>
+                <input type="file" name="imagen" class="form-control mb-2" accept="image/*">
+                <label class="form-label">Notas (opcional)</label>
+                <textarea name="notas" class="form-control mb-2" rows="3" placeholder="Notas adicionales..."></textarea>
+                <button class="btn btn-success w-100 mt-2">Guardar Turno</button>
             </form>
-            {% endif %}
         </div>
+
+        <h3 class="mt-5 mb-3">Turnos Reservados</h3>
+        <ul class="list-group">
+            {% for turno in turnos %}
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                style="background-color:#3a3a3a; color:white; border-color:#555;">
+                <span>{{ turno.nombre }} {{ turno.apellido }} — {{ turno.fecha }} {{ turno.hora }}</span>
+                <a href="{% url 'turnos:eliminar_turno' turno.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            </li>
+            {% empty %}
+            <li class="list-group-item" style="background-color:#3a3a3a; color:#aaa; border-color:#555;">
+                No hay turnos todavía
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% if error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
     </div>
-</nav>
-
-<!-- FORMULARIO RESERVAR TURNO -->
-<div class="container mt-5">
-    <div class="form-container">
-        <h2 class="mb-3">Reservar Turno</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
-            <input type="text" name="apellido" class="form-control" placeholder="Apellido" required>
-            <input type="text" name="telefono" class="form-control" placeholder="Teléfono" required>
-            <input type="email" name="email" class="form-control" placeholder="Email" required>
-            <input type="date" name="fecha" class="form-control" required>
-            <input type="time" name="hora" class="form-control" required>
-            <button class="btn btn-success w-100 mt-2">Guardar Turno</button>
-        </form>
-    </div>
 </div>
-
-<!-- LISTA DE TURNOS -->
-<div class="container mt-5 mb-5">
-    <h3>Turnos Reservados</h3>
-    <ul class="list-group">
-        {% for turno in turnos %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>{{ turno.nombre }} {{ turno.apellido }} — {{ turno.fecha }} {{ turno.hora }}</span>
-            <a href="{% url 'turnos:eliminar_turno' turno.id %}" class="btn btn-danger btn-sm">Eliminar</a>
-        </li>
-        {% empty %}
-        <li class="list-group-item">No hay turnos todavía</li>
-        {% endfor %}
-    </ul>
-</div>
-
-{% if error %}
-<div class="container">
-    <div class="alert alert-danger">{{ error }}</div>
-</div>
-{% endif %}
-
-</body>
-</html>
+{% endblock %}

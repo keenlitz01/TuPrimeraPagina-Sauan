@@ -1,5 +1,5 @@
 from django.db import models
-
+from ckeditor.fields import RichTextField
 
 class HorarioTurno(models.Model):
     nombre = models.CharField(max_length=50)
@@ -8,25 +8,19 @@ class HorarioTurno(models.Model):
     email = models.EmailField()
     fecha = models.DateField()
     hora = models.TimeField()
-
-
-class meta:
-    unique_together = ("fecha", "hora")
-
-
+    imagen = models.ImageField(upload_to='turnos/', null=True, blank=True)
+    notas = RichTextField(null=True, blank=True)
 
     def __str__(self):
-        return f" Turnos: {self.nombre} {self.apellido} / {self.fecha} {self.hora}"
-    
-    
+        return f"{self.nombre} {self.apellido} / {self.fecha} {self.hora}"
+
 class Cliente(models.Model):
     nombre = models.CharField(max_length=50)
-    email = models.EmailField()
     apellido = models.CharField(max_length=50, default="Sin apellido")
+    email = models.EmailField()
+
     def __str__(self):
         return self.nombre
-    
-
 
 class Servicio(models.Model):
     nombre = models.CharField(max_length=50)
@@ -35,4 +29,3 @@ class Servicio(models.Model):
 
     def __str__(self):
         return self.nombre
-

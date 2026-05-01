@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Mensaje - Barbería{% endblock %}
+
+{% block extra_styles %}
+.mensaje-card { background-color: #3a3a3a; border-radius: 10px; padding: 30px; max-width: 600px; margin: 0 auto; }
+.meta { color: #aaa; font-size: 0.85rem; margin-bottom: 20px; }
+.contenido { border-top: 1px solid #555; padding-top: 20px; line-height: 1.7; }
+{% endblock %}
+
+{% block content %}
+<div class="mensaje-card">
+    <h4>{{ mensaje.asunto }}</h4>
+    <div class="meta">
+        <span>De: <strong>{{ mensaje.remitente.username }}</strong></span> &nbsp;|&nbsp;
+        <span>Para: <strong>{{ mensaje.destinatario.username }}</strong></span> &nbsp;|&nbsp;
+        <span>{{ mensaje.fecha|date:"d/m/Y H:i" }}</span>
+    </div>
+    <div class="contenido">{{ mensaje.contenido }}</div>
+    <a href="{% url 'mensajes:enviar_mensaje' %}" class="btn btn-success mt-4">Responder</a>
+    <a href="{% url 'mensajes:bandeja_entrada' %}" class="btn btn-outline-light mt-4 ms-2">← Volver</a>
+</div>
+{% endblock %}

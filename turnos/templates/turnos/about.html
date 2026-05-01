@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}About - Barbería{% endblock %}
+
+{% block extra_styles %}
+.about-card { background-color: #3a3a3a; border-radius: 10px; padding: 40px; max-width: 700px; margin: 0 auto; }
+.about-card h2 { border-left: 4px solid #1e7e34; padding-left: 12px; margin-bottom: 24px; }
+.about-card p { color: #ccc; line-height: 1.8; }
+.dato { display: flex; align-items: center; gap: 12px; background-color: #2f2f2f; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+.dato span { color: #aaa; font-size: 0.95rem; }
+.dato strong { color: white; }
+{% endblock %}
+
+{% block content %}
+<div class="about-card">
+    <h2>✂️ Acerca de la Barbería</h2>
+    <p>
+        Somos una barbería con más de 10 años de experiencia ofreciendo cortes modernos
+        y clásicos. Nuestro objetivo es que cada cliente salga sintiéndose seguro y
+        con el mejor look posible.
+    </p>
+    <p>
+        Contamos con barberos especializados en técnicas actuales y tradicionales,
+        siempre con productos de primera calidad.
+    </p>
+    <div class="mt-4 mb-3">
+        <div class="dato">
+            <span>📍</span>
+            <div><span>Ubicación</span><br><strong>Buenos Aires, Argentina</strong></div>
+        </div>
+        <div class="dato">
+            <span>🕐</span>
+            <div><span>Horario de atención</span><br><strong>Lunes a Sábado de 9:00 a 20:00</strong></div>
+        </div>
+        <div class="dato">
+            <span>📞</span>
+            <div><span>Teléfono</span><br><strong>+54 11 1234-5678</strong></div>
+        </div>
+        <div class="dato">
+            <span>✉️</span>
+            <div><span>Email</span><br><strong>contacto@barberia.com</strong></div>
+        </div>
+    </div>
+    <a href="{% url 'turnos:home' %}" class="btn btn-success mt-2">Reservar un turno</a>
+</div>
+{% endblock %}
